@@ -4,3 +4,12 @@ export type PostList = {
   createdTime: Date;
   updatedTime: Date;
 };
+
+export type PostDetail = {
+  id: number;
+  writer: string;
+  title: string;
+  content: string;
+  createdTime: Date;
+  updatedTime: Date;
+};

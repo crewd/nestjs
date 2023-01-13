@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { PostService } from './post.service';
 
 @Controller('post')
@@ -8,5 +8,10 @@ export class PostController {
   @Get('list')
   getLsit() {
     return this.postService.getList();
+  }
+
+  @Get(':id')
+  getPost(@Param('id', ParseIntPipe) postId: number) {
+    return this.postService.getPost(postId);
   }
 }

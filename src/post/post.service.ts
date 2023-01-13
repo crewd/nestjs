@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Post } from './post.entity';
-import { PostList } from './post.types';
+import { PostDetail, PostList } from './post.types';
 
 @Injectable()
 export class PostService {
@@ -19,6 +19,7 @@ export class PostService {
 
     const postList: PostList[] = posts.map((post) => {
       return {
+        id: post.id,
         title: post.title,
         writer: post.writer,
         createdTime: post.createdAt,
@@ -26,5 +27,24 @@ export class PostService {
       };
     });
     return { success: true, message: 'success_post_list', data: postList };
+  }
+
+  async getPost(
+    id: number,
+  ): Promise<{ sucess: boolean; message: string; data: PostDetail }> {
+    const post = await this.postRepository.findOne({ id: id });
+    if (!post) {
+      throw new NotFoundException();
+    }
+    const detailPost: PostDetail = {
+      id: post.id,
+      writer: post.writer,
+      title: post.title,
+      content: post.content,
+      createdTime: post.createdAt,
+      updatedTime: post.updatedAt,
+    };
+
+    return { sucess: true, message: 'success_post_detail', data: detailPost };
   }
 }

@@ -8,12 +8,12 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    return await this.userService.logIn(loginDto);
+  login(@Body() loginDto: LoginDto) {
+    return this.userService.logIn(loginDto);
   }
 
   @Post('signup')
-  async signUp(@Body() signUpDto: SignUpDto) {
-    return await this.userService.signUp(signUpDto);
+  signUp(@Body() signUpDto: SignUpDto) {
+    return this.userService.signUp(signUpDto);
   }
 }

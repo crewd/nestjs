@@ -8,13 +8,13 @@ export class VerificationController {
   constructor(private verificationService: VerificationService) {}
 
   @Post('send')
-  async sendEmail(@Body() emailDto: EmailDto) {
-    return await this.verificationService.sendEmail(emailDto.email);
+  sendEmail(@Body() emailDto: EmailDto) {
+    return this.verificationService.sendEmail(emailDto.email);
   }
 
   @Post('verify')
-  async verify(@Body() verificationDto: VerificationDto) {
-    return await this.verificationService.verify(
+  verify(@Body() verificationDto: VerificationDto) {
+    return this.verificationService.verify(
       verificationDto.email,
       verificationDto.verificationCode,
     );
