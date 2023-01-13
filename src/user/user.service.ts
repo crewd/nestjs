@@ -10,12 +10,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { LoginDto } from './dto/login.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { SignUpDto } from './dto/signup.dto';
+import { EmailVerification } from 'src/email-verification/email-varification.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @InjectRepository(EmailVerification)
+    private verificationRepository: Repository<EmailVerification>,
+
     private jwtService: AuthService,
   ) {}
   async logIn(
@@ -57,6 +62,18 @@ export class UserService {
 
     if (checkedEmail) {
       throw new ConflictException();
+    }
+
+    const verificationData = await this.verificationRepository.findOne({
+      email: signUpDto.email,
+    });
+
+    if (!verificationData) {
+      throw new UnauthorizedException('not_verified_email');
+    }
+
+    if (!verificationData.isVerified) {
+      throw new UnauthorizedException('not_verification');
     }
 
     const hashPassword = await hash(

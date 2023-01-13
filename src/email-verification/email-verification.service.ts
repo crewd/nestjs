@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,8 +15,6 @@ import { EmailVerification } from './email-varification.entity';
 @Injectable()
 export class VerificationService {
   constructor(
-    private readonly config: ConfigService,
-
     @InjectRepository(User)
     private userRepository: Repository<User>,
 
@@ -23,7 +22,9 @@ export class VerificationService {
     private verificationRepository: Repository<EmailVerification>,
   ) {}
 
-  async sendEmail(email: string) {
+  async sendEmail(
+    email: string,
+  ): Promise<{ success: boolean; message: string }> {
     const checkedEmail = await this.userRepository.findOne({ email: email });
 
     if (checkedEmail) {
@@ -71,5 +72,34 @@ export class VerificationService {
       .catch(() => {
         throw new BadRequestException();
       });
+  }
+
+  async verify(
+    email: string,
+    code: string,
+  ): Promise<{ success: boolean; message: string }> {
+    const verificationData = await this.verificationRepository.findOne({
+      verificationCode: code,
+    });
+
+    if (verificationData.email !== email) {
+      throw new UnauthorizedException('no_match_email');
+    }
+
+    if (verificationData.verificationCode !== code) {
+      throw new UnauthorizedException('no_match_verification_code');
+    }
+
+    const currentTime = new Date();
+
+    if (verificationData.expirationTime < currentTime) {
+      throw new UnauthorizedException('time_out');
+    }
+
+    verificationData.isVerified = true;
+
+    await this.verificationRepository.save(verificationData);
+
+    return { success: true, message: 'verification_success' };
   }
 }
