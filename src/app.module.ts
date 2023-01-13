@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { VerificationModule } from './email-verification/email-verification.module';
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { VerificationModule } from './email-verification/email-verification.modu
     }),
     UserModule,
     VerificationModule,
+    PostModule,
   ],
   controllers: [AppController],
   providers: [AppService],
