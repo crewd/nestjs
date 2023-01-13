@@ -15,7 +15,7 @@ import { SignUpDto } from './dto/signup.dto';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>, // private tokenUtils: TokenUtils,
+    private userRepository: Repository<User>,
     private jwtService: AuthService,
   ) {}
   async logIn(
