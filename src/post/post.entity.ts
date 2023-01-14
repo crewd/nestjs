@@ -18,7 +18,7 @@ export class Post {
   userId: number;
 
   @Column()
-  writer: string;
+  userName: string;
 
   @Column()
   title: string;

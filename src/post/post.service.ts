@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreatePostDto } from './dto/create-post.dto';
 import { Post } from './post.entity';
 import { PostDetail, PostList } from './post.types';
 
@@ -21,7 +22,7 @@ export class PostService {
       return {
         id: post.id,
         title: post.title,
-        writer: post.writer,
+        writer: post.userName,
         createdTime: post.createdAt,
         updatedTime: post.updatedAt,
       };
@@ -38,7 +39,7 @@ export class PostService {
     }
     const detailPost: PostDetail = {
       id: post.id,
-      writer: post.writer,
+      writer: post.userName,
       title: post.title,
       content: post.content,
       createdTime: post.createdAt,
@@ -47,4 +48,8 @@ export class PostService {
 
     return { sucess: true, message: 'success_post_detail', data: detailPost };
   }
+
+  // async createPost(postData: CreatePostDto) {
+  //   const post = postData.
+  // }
 }
