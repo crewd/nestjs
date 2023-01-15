@@ -8,7 +8,7 @@ import { compare, hash } from 'bcrypt';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LoginDto } from './dto/login.dto';
-import { TokenService } from 'src/auth/token.service';
+import { AuthService } from 'src/auth/auth.service';
 import { SignUpDto } from './dto/signup.dto';
 import { EmailVerification } from 'src/email-verification/email-varification.entity';
 
@@ -21,7 +21,7 @@ export class UserService {
     @InjectRepository(EmailVerification)
     private verificationRepository: Repository<EmailVerification>,
 
-    private tokenService: TokenService,
+    private authService: AuthService,
   ) {}
   async logIn(
     loginDto: LoginDto,
@@ -41,7 +41,7 @@ export class UserService {
     if (!checkPassword) {
       throw new UnauthorizedException();
     }
-    const userToken = this.tokenService.sign(checkedUser.id.toString());
+    const userToken = this.authService.sign(checkedUser.id.toString());
 
     return {
       success: true,

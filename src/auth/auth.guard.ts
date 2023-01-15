@@ -5,11 +5,11 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { TokenService } from './token.service';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly tokenService: TokenService) {}
+  constructor(private readonly authService: AuthService) {}
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -26,8 +26,8 @@ export class AuthGuard implements CanActivate {
       throw new BadRequestException();
     }
 
-    const payload = this.tokenService.verify(token);
-    request.body.userId = payload;
+    const payload = this.authService.verify(token);
+    request.userId = payload;
     return true;
   }
 }

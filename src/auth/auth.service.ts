@@ -6,7 +6,7 @@ import {
 import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 
 @Injectable()
-export class TokenService {
+export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
   sign(id: string) {
     try {
