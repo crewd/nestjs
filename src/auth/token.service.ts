@@ -9,8 +9,12 @@ import { JwtService, JwtVerifyOptions } from '@nestjs/jwt';
 export class TokenService {
   constructor(private readonly jwtService: JwtService) {}
   sign(id: string) {
-    const token = this.jwtService.sign(id);
-    return token;
+    try {
+      const token = this.jwtService.sign(id);
+      return token;
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
   }
 
   verify(token: string, publicKey?: string, options?: JwtVerifyOptions) {
