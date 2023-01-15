@@ -10,6 +10,7 @@ import {
   RequestCreatePostDto,
   ResponseCreatePostDto,
 } from './dto/create-post.dto';
+import { ResponseDeletePostDto } from './dto/delete-post.dto';
 import {
   RequestUpdatePostDto,
   ResponseUpdatePostDto,
@@ -121,5 +122,21 @@ export class PostService {
     };
 
     return { success: true, message: 'success_update_post', data: postData };
+  }
+
+  async deletePost(
+    postId: number,
+    userId: number,
+  ): Promise<ResponseDeletePostDto> {
+    const post = await this.postRepository.findOne({ id: postId });
+    if (!post) {
+      console.log(post);
+      throw new NotFoundException();
+    }
+    if (post.userId !== userId) {
+      throw new UnauthorizedException();
+    }
+    await this.postRepository.delete({ id: postId });
+    return { success: true, message: 'success_delete_post' };
   }
 }

@@ -9,7 +9,7 @@ import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RequestLoginDto, ResponseLoginDto } from './dto/login.dto';
 import { AuthService } from 'src/auth/auth.service';
-import { RequestSignUpDto } from './dto/signup.dto';
+import { RequestSignUpDto, ResponseSignUpDto } from './dto/signup.dto';
 import { EmailVerification } from 'src/email-verification/email-varification.entity';
 
 @Injectable()

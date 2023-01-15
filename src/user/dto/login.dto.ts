@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail, IsObject, IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 import { LoginData } from '../user.types';
 
 export class RequestLoginDto {

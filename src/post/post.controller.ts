@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -11,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RequestCreatePostDto } from './dto/create-post.dto';
+import { RequestDeletePostDto } from './dto/delete-post.dto';
 import { RequestUpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
 
@@ -40,5 +42,12 @@ export class PostController {
   updatePost(@Req() request, @Body() updatePostDto: RequestUpdatePostDto) {
     const userId = Number(request.userId);
     return this.postService.updatePost(updatePostDto, userId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Delete('delete')
+  deletePost(@Req() request, @Body() deletePostDto: RequestDeletePostDto) {
+    const userId = Number(request.userId);
+    return this.postService.deletePost(deletePostDto.postId, userId);
   }
 }

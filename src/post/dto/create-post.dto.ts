@@ -1,4 +1,4 @@
-import { IsBoolean, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { PostDetail } from '../post.types';
 
 export class RequestCreatePostDto {

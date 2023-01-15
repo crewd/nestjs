@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail, IsNumber, IsString } from 'class-validator';
+import { IsEmail, IsNumber, IsString } from 'class-validator';
 
 export class RequestSignUpDto {
   @IsEmail()
