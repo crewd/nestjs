@@ -1,6 +1,7 @@
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
+import { PostDetail } from '../post.types';
 
-export class CreatePostDto {
+export class RequestCreatePostDto {
   @IsString()
   title: string;
 
@@ -9,4 +10,10 @@ export class CreatePostDto {
 
   @IsString()
   userName: string;
+}
+
+export class ResponseCreatePostDto {
+  success: boolean;
+  message: string;
+  data: PostDetail;
 }

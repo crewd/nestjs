@@ -7,9 +7,9 @@ import { Repository } from 'typeorm';
 import { compare, hash } from 'bcrypt';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LoginDto } from './dto/login.dto';
+import { RequestLoginDto, ResponseLoginDto } from './dto/login.dto';
 import { AuthService } from 'src/auth/auth.service';
-import { SignUpDto } from './dto/signup.dto';
+import { RequestSignUpDto } from './dto/signup.dto';
 import { EmailVerification } from 'src/email-verification/email-varification.entity';
 
 @Injectable()
@@ -23,9 +23,7 @@ export class UserService {
 
     private authService: AuthService,
   ) {}
-  async logIn(
-    loginDto: LoginDto,
-  ): Promise<{ success: boolean; message: string; data: any }> {
+  async logIn(loginDto: RequestLoginDto): Promise<ResponseLoginDto> {
     const checkedUser = await this.userRepository.findOne({
       email: loginDto.email,
     });
@@ -53,9 +51,7 @@ export class UserService {
       },
     };
   }
-  async signUp(
-    signUpDto: SignUpDto,
-  ): Promise<{ success: boolean; message: string }> {
+  async signUp(signUpDto: RequestSignUpDto): Promise<ResponseSignUpDto> {
     const checkedEmail = await this.userRepository.findOne({
       email: signUpDto.email,
     });

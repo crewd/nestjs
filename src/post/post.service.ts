@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -7,8 +6,14 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
-import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
+import {
+  RequestCreatePostDto,
+  ResponseCreatePostDto,
+} from './dto/create-post.dto';
+import {
+  RequestUpdatePostDto,
+  ResponseUpdatePostDto,
+} from './dto/update-post.dto';
 import { Post } from './post.entity';
 import { PostDetail, PostList } from './post.types';
 
@@ -61,30 +66,39 @@ export class PostService {
   }
 
   async createPost(
-    postData: CreatePostDto,
+    createPostData: RequestCreatePostDto,
     userId: number,
-  ): Promise<{ success: boolean; message: string }> {
+  ): Promise<ResponseCreatePostDto> {
     const user = await this.userRepository.findOne({ id: userId });
 
-    if (user.name !== postData.userName) {
+    if (user.name !== createPostData.userName) {
       throw new UnauthorizedException();
     }
 
     const post = new Post();
-    post.content = postData.content;
-    post.title = postData.title;
-    post.userName = postData.userName;
+    post.content = createPostData.content;
+    post.title = createPostData.title;
+    post.userName = createPostData.userName;
     post.userId = userId;
 
     await this.postRepository.save(post);
 
-    return { success: true, message: 'success_create_post' };
+    const postData = {
+      id: post.id,
+      writer: post.userName,
+      title: post.title,
+      content: post.content,
+      createdTime: post.createdAt,
+      updatedTime: post.updatedAt,
+    };
+
+    return { success: true, message: 'success_create_post', data: postData };
   }
 
   async updatePost(
-    updateData: UpdatePostDto,
+    updateData: RequestUpdatePostDto,
     userId: number,
-  ): Promise<{ success: boolean; message: string; data: PostDetail }> {
+  ): Promise<ResponseUpdatePostDto> {
     const post = await this.postRepository.findOne({ id: updateData.postId });
     if (!post) {
       throw new NotFoundException();

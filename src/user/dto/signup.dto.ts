@@ -1,6 +1,6 @@
-import { IsEmail, IsNumber, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsNumber, IsString } from 'class-validator';
 
-export class SignUpDto {
+export class RequestSignUpDto {
   @IsEmail()
   email: string;
 
@@ -12,4 +12,9 @@ export class SignUpDto {
 
   @IsString()
   password: string;
+}
+
+export class ResponseSignUpDto {
+  success: boolean;
+  message: string;
 }

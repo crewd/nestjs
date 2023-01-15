@@ -1,7 +1,8 @@
 import { Type } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
+import { PostDetail } from '../post.types';
 
-export class UpdatePostDto {
+export class RequestUpdatePostDto {
   @IsString()
   title: string;
 
@@ -14,4 +15,10 @@ export class UpdatePostDto {
 
   @IsString()
   userName: string;
+}
+
+export class ResponseUpdatePostDto {
+  success: boolean;
+  message: string;
+  data: PostDetail;
 }
