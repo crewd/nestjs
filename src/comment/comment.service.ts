@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from 'src/post/post.entity';
 import { Repository } from 'typeorm';
 import { Comment } from './comment.entity';
+import { ResponseCommentsDto } from './dto/comment-list.dto';
 import {
   RequestCreateCommentDto,
   ResponseCreateCommentDto,
@@ -44,6 +45,8 @@ export class CommentService {
     });
 
     if (!parentComment && commentData.parentId) {
+      console.log('not found');
+
       throw new NotFoundException();
     }
 
@@ -98,6 +101,34 @@ export class CommentService {
     return {
       success: true,
       message: 'success_create_comment',
+      data: sortedComments,
+    };
+  }
+
+  async getComments(postId: number): Promise<ResponseCommentsDto> {
+    const comments = await this.commentRepository.find({ postId: postId });
+
+    const organizedComments = comments.map((data) => {
+      return {
+        id: data.id,
+        parentId: data.parentId,
+        userName: data.userName,
+        content: data.content,
+        depth: data.depth,
+        group: data.group,
+        order: data.order,
+        createdTime: data.createdAt,
+        updatedTime: data.updatedAt,
+      };
+    });
+
+    const sortedComments = organizedComments.sort(
+      (a, b) => a.group - b.group || a.order - b.order,
+    );
+
+    return {
+      success: true,
+      message: 'success_comment_list',
       data: sortedComments,
     };
   }

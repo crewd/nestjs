@@ -3,14 +3,6 @@ import { IsNumber, IsString } from 'class-validator';
 import { Comment } from '../comment.types';
 
 export class RequestCreateCommentDto {
-  @IsNumber()
-  @Type(() => Number)
-  userId: number;
-
-  @IsNumber()
-  @Type(() => Number)
-  postId: number;
-
   @IsString()
   userName: string;
 
