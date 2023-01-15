@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from 'src/post/post.entity';
 import { Repository } from 'typeorm';
@@ -8,6 +8,11 @@ import {
   RequestCreateCommentDto,
   ResponseCreateCommentDto,
 } from './dto/create-comment.dto';
+import { ResponseDeleteCommentDto } from './dto/delete-comment.dto';
+import {
+  RequestUpdateCommentDto,
+  ResponseUpdateCommentDto,
+} from './dto/update-comment.dto';
 
 export class CommentService {
   constructor(
@@ -131,5 +136,43 @@ export class CommentService {
       message: 'success_comment_list',
       data: sortedComments,
     };
+  }
+
+  async updateComment(
+    commentId: number,
+    userId: number,
+    updateData: RequestUpdateCommentDto,
+  ): Promise<ResponseUpdateCommentDto> {
+    const comment = await this.commentRepository.findOne({ id: commentId });
+    if (!comment) {
+      throw new NotFoundException();
+    }
+
+    if (userId !== comment.userId) {
+      throw new UnauthorizedException();
+    }
+
+    comment.content = updateData.content;
+    await this.commentRepository.save(comment);
+
+    return { success: true, message: 'success_update_comment' };
+  }
+
+  async deleteComment(
+    commentId: number,
+    userId: number,
+  ): Promise<ResponseDeleteCommentDto> {
+    const comment = await this.commentRepository.findOne({ id: commentId });
+
+    if (!comment) {
+      throw new NotFoundException();
+    }
+
+    if (userId !== comment.userId) {
+      throw new UnauthorizedException();
+    }
+
+    await this.commentRepository.delete({ id: commentId });
+    return { success: true, message: 'success_delete_comment' };
   }
 }

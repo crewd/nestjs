@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { Comment } from '../comment.types';
 
 export class RequestCreateCommentDto {
