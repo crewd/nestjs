@@ -11,6 +11,7 @@ import {
   ResponseCreatePostDto,
 } from './dto/create-post.dto';
 import { ResponseDeletePostDto } from './dto/delete-post.dto';
+import { ResponsePostListDto } from './dto/post-list.dto';
 import {
   RequestUpdatePostDto,
   ResponseUpdatePostDto,
@@ -27,11 +28,7 @@ export class PostService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
-  async getList(): Promise<{
-    success: boolean;
-    message: string;
-    data: PostList[];
-  }> {
+  async getList(): Promise<ResponsePostListDto> {
     const posts = await this.postRepository.find();
 
     const postList: PostList[] = posts.map((post) => {
