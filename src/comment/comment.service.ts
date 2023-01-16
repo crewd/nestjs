@@ -1,4 +1,8 @@
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from 'src/post/post.entity';
 import { Repository } from 'typeorm';
@@ -52,7 +56,7 @@ export class CommentService {
     if (!parentComment && commentData.parentId) {
       console.log('not found');
 
-      throw new NotFoundException();
+      throw new BadRequestException();
     }
 
     if (commentData.parentId) {
@@ -145,7 +149,7 @@ export class CommentService {
   ): Promise<ResponseUpdateCommentDto> {
     const comment = await this.commentRepository.findOne({ id: commentId });
     if (!comment) {
-      throw new NotFoundException();
+      throw new BadRequestException();
     }
 
     if (userId !== comment.userId) {
@@ -165,7 +169,7 @@ export class CommentService {
     const comment = await this.commentRepository.findOne({ id: commentId });
 
     if (!comment) {
-      throw new NotFoundException();
+      throw new BadRequestException();
     }
 
     if (userId !== comment.userId) {
