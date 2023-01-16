@@ -10,12 +10,14 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { RequestCreatePostDto } from './dto/create-post.dto';
 import { RequestDeletePostDto } from './dto/delete-post.dto';
 import { RequestUpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
 
+@ApiTags('Post API')
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}

@@ -10,11 +10,13 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CommentService } from './comment.service';
 import { RequestCreateCommentDto } from './dto/create-comment.dto';
 import { RequestUpdateCommentDto } from './dto/update-comment.dto';
 
+@ApiTags('Comment API')
 @Controller()
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}

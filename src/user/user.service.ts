@@ -12,7 +12,6 @@ import { AuthService } from 'src/auth/auth.service';
 import { RequestSignUpDto, ResponseSignUpDto } from './dto/signup.dto';
 import { EmailVerification } from 'src/email-verification/email-varification.entity';
 import { BadRequestException } from '@nestjs/common/exceptions';
-import { LoginData } from './user.types';
 import { ResponseKakaoLoginDto } from './dto/kakao-login.dto';
 import {
   RequestKakaoSignUpDto,
