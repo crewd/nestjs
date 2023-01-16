@@ -1,5 +1,4 @@
 import { IsString } from 'class-validator';
-import { Comment } from '../comment.types';
 
 export class RequestUpdateCommentDto {
   @IsString()

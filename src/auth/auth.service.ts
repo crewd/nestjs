@@ -17,14 +17,14 @@ export class AuthService {
     }
   }
 
-  verify(token: string, publicKey?: string, options?: JwtVerifyOptions) {
+  verify(token: string, key?: string, options?: JwtVerifyOptions) {
     if (!token) {
       throw new NotFoundException();
     }
     try {
-      if (publicKey) {
+      if (key) {
         const payload = this.jwtService.verify(token, {
-          publicKey: publicKey,
+          secret: key,
           ...options,
         });
         return payload;
@@ -35,7 +35,7 @@ export class AuthService {
       });
       return payload;
     } catch (err) {
-      throw new BadRequestException();
+      throw new BadRequestException(err.message);
     }
   }
 }

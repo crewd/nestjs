@@ -11,6 +11,13 @@ import { RequestLoginDto, ResponseLoginDto } from './dto/login.dto';
 import { AuthService } from 'src/auth/auth.service';
 import { RequestSignUpDto, ResponseSignUpDto } from './dto/signup.dto';
 import { EmailVerification } from 'src/email-verification/email-varification.entity';
+import { BadRequestException } from '@nestjs/common/exceptions';
+import { LoginData } from './user.types';
+import { ResponseKakaoLoginDto } from './dto/kakao-login.dto';
+import {
+  RequestKakaoSignUpDto,
+  ResponseKakaoSignUpDto,
+} from './dto/kako-signup.dto';
 
 @Injectable()
 export class UserService {
@@ -85,6 +92,54 @@ export class UserService {
 
     await this.userRepository.save(user);
 
+    return { success: true, message: 'success_sign_up' };
+  }
+
+  async kakaoLogin(kakaoUid: string): Promise<ResponseKakaoLoginDto> {
+    if (!kakaoUid) {
+      throw new BadRequestException('invaild_kakaoUid');
+    }
+    const user = await this.userRepository.findOne({ kakaoUid: kakaoUid });
+
+    if (!user) {
+      throw new UnauthorizedException('not_found_user');
+    }
+
+    const token = await this.authService.sign(user.id.toString());
+
+    return {
+      success: true,
+      message: 'success_kakao_login',
+      data: { token: token, email: user.email, name: user.name },
+    };
+  }
+
+  async kakaoSignUp(
+    kakaoSignUpData: RequestKakaoSignUpDto,
+    kakaoUid: string,
+  ): Promise<ResponseKakaoSignUpDto> {
+    const checkedEmail = await this.userRepository.findOne({
+      email: kakaoSignUpData.email,
+    });
+
+    if (checkedEmail) {
+      throw new ConflictException('duplicate_email');
+    }
+    const checkedKakaoUid = await this.userRepository.findOne({
+      kakaoUid: kakaoUid,
+    });
+
+    if (checkedKakaoUid) {
+      throw new ConflictException('duplicate_kakao_id');
+    }
+
+    const user = new User();
+    user.email = kakaoSignUpData.email;
+    user.name = kakaoSignUpData.name;
+    user.age = kakaoSignUpData.age;
+    user.kakaoUid = kakaoUid;
+
+    await this.userRepository.save(user);
     return { success: true, message: 'success_sign_up' };
   }
 }
