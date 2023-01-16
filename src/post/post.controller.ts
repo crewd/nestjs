@@ -72,6 +72,7 @@ export class PostController {
       },
     },
   })
+  @ApiResponse({ status: 400, description: 'BadRequestException' })
   getPost(@Param('id', ParseIntPipe) postId: number) {
     return this.postService.getPost(postId);
   }
@@ -99,6 +100,7 @@ export class PostController {
       },
     },
   })
+  @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   createPost(@Req() request, @Body() createPostDto: RequestCreatePostDto) {
     const userId = Number(request.userId);
     return this.postService.createPost(createPostDto, userId);
@@ -127,6 +129,8 @@ export class PostController {
       },
     },
   })
+  @ApiResponse({ status: 400, description: 'BadRequestException' })
+  @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   updatePost(@Req() request, @Body() updatePostDto: RequestUpdatePostDto) {
     const userId = Number(request.userId);
     return this.postService.updatePost(updatePostDto, userId);
@@ -147,6 +151,8 @@ export class PostController {
       },
     },
   })
+  @ApiResponse({ status: 400, description: 'BadRequestException' })
+  @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   deletePost(@Req() request, @Body() deletePostDto: RequestDeletePostDto) {
     const userId = Number(request.userId);
     return this.postService.deletePost(deletePostDto.postId, userId);

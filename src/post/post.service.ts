@@ -100,7 +100,7 @@ export class PostService {
   ): Promise<ResponseUpdatePostDto> {
     const post = await this.postRepository.findOne({ id: updateData.postId });
     if (!post) {
-      throw new NotFoundException();
+      throw new BadRequestException();
     }
     if (post.userId !== userId) {
       throw new UnauthorizedException();

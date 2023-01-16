@@ -99,6 +99,6 @@ export class VerificationService {
 
     await this.verificationRepository.save(verificationData);
 
-    return { success: true, message: 'verification_success' };
+    return { success: true, message: 'success_verification' };
   }
 }
