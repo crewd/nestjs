@@ -22,6 +22,7 @@ export class RequestKakaoSignUpDto {
     description: '가입할 유저의 나이 입력',
   })
   @IsNumber()
+  @Type(() => Number)
   age: number;
 
   @ApiProperty({

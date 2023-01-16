@@ -1,6 +1,7 @@
 import {
   Injectable,
   NotFoundException,
+  BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -48,7 +49,7 @@ export class PostService {
   ): Promise<{ sucess: boolean; message: string; data: PostDetail }> {
     const post = await this.postRepository.findOne({ id: id });
     if (!post) {
-      throw new NotFoundException();
+      throw new BadRequestException();
     }
 
     const detailPost: PostDetail = {

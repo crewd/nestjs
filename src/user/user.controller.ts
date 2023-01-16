@@ -1,7 +1,6 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import {
   ApiCreatedResponse,
-  ApiOkResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -76,10 +75,7 @@ export class UserController {
     },
   })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
-  kakaoLogin(
-    @Req() request,
-    @Body() requsetKaKaoLoginDto: RequestKakaoLoginDto,
-  ) {
+  kakaoLogin(@Req() request, @Body() kaKaoLoginDto: RequestKakaoLoginDto) {
     const kakaoUid = request.kakaoUid;
     return this.userService.kakaoLogin(kakaoUid);
   }
