@@ -1,26 +1,25 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
 import { PostDetail } from '../post.types';
 
 export class RequestCreatePostDto {
-  @ApiProperty({
-    example: 'post_title',
-    description: '생성할 게시글의 제목',
-  })
+  /**
+   * 생성할 게시글의 제목
+   * @example 'post_title'
+   */
   @IsString()
   title: string;
 
-  @ApiProperty({
-    example: 'post_content',
-    description: '생성할 게시글의 내용',
-  })
+  /**
+   * 생성할 게시글의 내용
+   * @example 'post_content'
+   */
   @IsString()
   content: string;
 
-  @ApiProperty({
-    example: 'post_user_name',
-    description: '생성할 게시글의 작성자',
-  })
+  /**
+   * 생성할 게시글의 작성자
+   * @example 'post_user_name'
+   */
   @IsString()
   userName: string;
 }

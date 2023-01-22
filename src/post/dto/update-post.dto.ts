@@ -1,35 +1,34 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
 import { PostDetail } from '../post.types';
 
 export class RequestUpdatePostDto {
-  @ApiProperty({
-    example: 'post_title',
-    description: '수정할 게시글의 제목',
-  })
+  /**
+   * 수정할 게시글의 제목
+   * @example 'post_title'
+   */
   @IsString()
   title: string;
 
-  @ApiProperty({
-    example: 'post_content',
-    description: '생성할 게시글의 내용',
-  })
+  /**
+   * 수정할 게시글의 내용
+   * @example 'post_content'
+   */
   @IsString()
   content: string;
 
-  @ApiProperty({
-    example: 1,
-    description: '수정할 게시글의 ID',
-  })
+  /**
+   * 수정할 게시글의 Id
+   * @example 1
+   */
   @IsNumber()
   @Type(() => Number)
   postId: number;
 
-  @ApiProperty({
-    example: 'post_user_name',
-    description: '수정할 게시글의 작성자',
-  })
+  /**
+   * 수정할 게시글의 작성자
+   * @example 'post_user_name'
+   */
   @IsString()
   userName: string;
 }

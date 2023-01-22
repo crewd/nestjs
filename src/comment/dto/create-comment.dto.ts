@@ -1,27 +1,26 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
 import { Comment } from '../comment.types';
 
 export class RequestCreateCommentDto {
-  @ApiProperty({
-    example: 'comment_user_name',
-    description: '댓글 작성자',
-  })
+  /**
+   * 작성할 댓글의 작성자
+   * @example 'comment_user_name'
+   */
   @IsString()
   userName: string;
 
-  @ApiProperty({
-    example: 'comment_content',
-    description: '작성할 댓글 내용',
-  })
+  /**
+   * 작성할 댓글의 내용
+   * @example 'comment_content'
+   */
   @IsString()
   content: string;
 
-  @ApiProperty({
-    example: 1,
-    description: '부모 댓글의 ID',
-  })
+  /**
+   * 부모 댓글의 ID, 없으면 생략
+   * @example 1
+   */
   @IsNumber()
   @Type(() => Number)
   parentId?: number;

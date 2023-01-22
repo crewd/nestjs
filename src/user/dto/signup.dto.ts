@@ -1,32 +1,31 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNumber, IsString } from 'class-validator';
 
 export class RequestSignUpDto {
-  @ApiProperty({
-    example: 'example@gmail.com',
-    description: '가입할 유저의 이메일 입력',
-  })
+  /**
+   * 가입할 유저의 이메일
+   * @example 'example@gmail.com'
+   */
   @IsEmail()
   email: string;
 
-  @ApiProperty({
-    example: 'user_name',
-    description: '가입할 유저의 이름 입력',
-  })
+  /**
+   * 가입할 유저의 이름
+   * @example '홍길동'
+   */
   @IsString()
   name: string;
 
-  @ApiProperty({
-    example: 25,
-    description: '가입할 유저의 나이 입력',
-  })
+  /**
+   * 가입할 유저의 나이
+   * @example 25
+   */
   @IsNumber()
   age: number;
 
-  @ApiProperty({
-    example: 'user_password',
-    description: '가입할 유저의 비밀번호 입력',
-  })
+  /**
+   * 가입할 유저의 비밀번호
+   * @example 'user_password'
+   */
   @IsString()
   password: string;
 }
