@@ -1,7 +1,6 @@
 import { IsString } from 'class-validator';
-import { PostDetail } from '../post.types';
 
-export class RequestCreatePostDto {
+export class CreatePostDto {
   /**
    * 생성할 게시글의 제목
    * @example 'post_title'
@@ -22,10 +21,4 @@ export class RequestCreatePostDto {
    */
   @IsString()
   userName: string;
-}
-
-export class ResponseCreatePostDto {
-  success: boolean;
-  message: string;
-  data: PostDetail;
 }

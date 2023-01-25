@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsEmail, IsNumber, IsString } from 'class-validator';
 
-export class RequestKakaoSignUpDto {
+export class KakaoSignUpDto {
   /**
    * 가입할 유저의 이메일
    * @example 'example@gmail.com'
@@ -37,9 +37,4 @@ export class RequestKakaoSignUpDto {
    */
   @IsString()
   kakaoIdToken: string;
-}
-
-export class ResponseKakaoSignUpDto {
-  success: boolean;
-  message: string;
 }

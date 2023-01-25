@@ -21,9 +21,7 @@ export class VerificationService {
     private verificationRepository: Repository<EmailVerification>,
   ) {}
 
-  async sendEmail(
-    email: string,
-  ): Promise<{ success: boolean; message: string }> {
+  async sendEmail(email: string): Promise<void> {
     const checkedEmail = await this.userRepository.findOne({ email: email });
 
     if (checkedEmail) {
@@ -66,17 +64,14 @@ export class VerificationService {
     return client.messages
       .create(process.env.MAILGUN_API_URL, message)
       .then(() => {
-        return { success: true, message: 'success_send_verification_code' };
+        /**/
       })
       .catch(() => {
         throw new BadRequestException();
       });
   }
 
-  async verify(
-    email: string,
-    code: string,
-  ): Promise<{ success: boolean; message: string }> {
+  async verify(email: string, code: string): Promise<void> {
     const verificationData = await this.verificationRepository.findOne({
       verificationCode: code,
     });
@@ -98,7 +93,5 @@ export class VerificationService {
     verificationData.isVerified = true;
 
     await this.verificationRepository.save(verificationData);
-
-    return { success: true, message: 'success_verification' };
   }
 }

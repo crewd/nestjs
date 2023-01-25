@@ -1,8 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
-import { PostDetail } from '../post.types';
 
-export class RequestUpdatePostDto {
+export class UpdatePostDto {
   /**
    * 수정할 게시글의 제목
    * @example 'post_title'
@@ -31,10 +30,4 @@ export class RequestUpdatePostDto {
    */
   @IsString()
   userName: string;
-}
-
-export class ResponseUpdatePostDto {
-  success: boolean;
-  message: string;
-  data: PostDetail;
 }

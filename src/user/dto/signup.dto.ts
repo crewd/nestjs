@@ -1,6 +1,6 @@
 import { IsEmail, IsNumber, IsString } from 'class-validator';
 
-export class RequestSignUpDto {
+export class SignUpDto {
   /**
    * 가입할 유저의 이메일
    * @example 'example@gmail.com'
@@ -28,9 +28,4 @@ export class RequestSignUpDto {
    */
   @IsString()
   password: string;
-}
-
-export class ResponseSignUpDto {
-  success: boolean;
-  message: string;
 }

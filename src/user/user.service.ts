@@ -7,16 +7,13 @@ import { Repository } from 'typeorm';
 import { compare, hash } from 'bcrypt';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RequestLoginDto, ResponseLoginDto } from './dto/login.dto';
+import { LoginDto } from './dto/login.dto';
 import { AuthService } from 'src/auth/auth.service';
-import { RequestSignUpDto, ResponseSignUpDto } from './dto/signup.dto';
+import { SignUpDto } from './dto/signup.dto';
 import { EmailVerification } from 'src/email-verification/email-varification.entity';
 import { BadRequestException } from '@nestjs/common/exceptions';
-import { ResponseKakaoLoginDto } from './dto/kakao-login.dto';
-import {
-  RequestKakaoSignUpDto,
-  ResponseKakaoSignUpDto,
-} from './dto/kako-signup.dto';
+import { KakaoSignUpDto } from './dto/kako-signup.dto';
+import { LoginResultDto } from './dto/login-result.dto';
 
 @Injectable()
 export class UserService {
@@ -29,7 +26,7 @@ export class UserService {
 
     private authService: AuthService,
   ) {}
-  async logIn(loginDto: RequestLoginDto): Promise<ResponseLoginDto> {
+  async logIn(loginDto: LoginDto): Promise<LoginResultDto> {
     const checkedUser = await this.userRepository.findOne({
       email: loginDto.email,
     });
@@ -48,16 +45,12 @@ export class UserService {
     const userToken = this.authService.sign(checkedUser.id.toString());
 
     return {
-      success: true,
-      message: 'success_login',
-      data: {
-        token: userToken,
-        email: checkedUser.email,
-        name: checkedUser.name,
-      },
+      token: userToken,
+      email: checkedUser.email,
+      name: checkedUser.name,
     };
   }
-  async signUp(signUpDto: RequestSignUpDto): Promise<ResponseSignUpDto> {
+  async signUp(signUpDto: SignUpDto): Promise<void> {
     const checkedEmail = await this.userRepository.findOne({
       email: signUpDto.email,
     });
@@ -90,11 +83,9 @@ export class UserService {
     user.age = signUpDto.age;
 
     await this.userRepository.save(user);
-
-    return { success: true, message: 'success_sign_up' };
   }
 
-  async kakaoLogin(kakaoUid: string): Promise<ResponseKakaoLoginDto> {
+  async kakaoLogin(kakaoUid: string): Promise<LoginResultDto> {
     if (!kakaoUid) {
       throw new BadRequestException('invaild_kakaoUid');
     }
@@ -106,17 +97,13 @@ export class UserService {
 
     const token = await this.authService.sign(user.id.toString());
 
-    return {
-      success: true,
-      message: 'success_kakao_login',
-      data: { token: token, email: user.email, name: user.name },
-    };
+    return { token: token, email: user.email, name: user.name };
   }
 
   async kakaoSignUp(
-    kakaoSignUpData: RequestKakaoSignUpDto,
+    kakaoSignUpData: KakaoSignUpDto,
     kakaoUid: string,
-  ): Promise<ResponseKakaoSignUpDto> {
+  ): Promise<void> {
     const checkedEmail = await this.userRepository.findOne({
       email: kakaoSignUpData.email,
     });
@@ -139,6 +126,5 @@ export class UserService {
     user.kakaoUid = kakaoUid;
 
     await this.userRepository.save(user);
-    return { success: true, message: 'success_sign_up' };
   }
 }

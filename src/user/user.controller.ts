@@ -1,15 +1,10 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import {
-  ApiCreatedResponse,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { KakaoAuthGuard } from 'src/auth/kakao-auth.guard';
-import { RequestKakaoLoginDto } from './dto/kakao-login.dto';
-import { RequestKakaoSignUpDto } from './dto/kako-signup.dto';
-import { RequestLoginDto } from './dto/login.dto';
-import { RequestSignUpDto } from './dto/signup.dto';
+import { KakaoLoginDto } from './dto/kakao-login.dto';
+import { KakaoSignUpDto } from './dto/kako-signup.dto';
+import { LoginDto } from './dto/login.dto';
+import { SignUpDto } from './dto/signup.dto';
 import { UserService } from './user.service';
 
 @ApiTags('User API')
@@ -19,38 +14,15 @@ export class UserController {
 
   @Post('login')
   @ApiOperation({ summary: '로그인', description: '유저 로그인 API' })
-  @ApiCreatedResponse({
-    description: '로그인 성공',
-    schema: {
-      example: {
-        success: true,
-        message: 'success_login',
-        data: {
-          email: 'example@gmail.com',
-          name: 'user_name',
-          token: 'user_token',
-        },
-      },
-    },
-  })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
-  login(@Body() loginDto: RequestLoginDto) {
+  login(@Body() loginDto: LoginDto) {
     return this.userService.logIn(loginDto);
   }
 
   @Post('signup')
   @ApiOperation({ summary: '회원가입', description: '유저 회원가입 API' })
-  @ApiCreatedResponse({
-    description: '회원가입 성공',
-    schema: {
-      example: {
-        success: true,
-        message: 'success_sign_up',
-      },
-    },
-  })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
-  signUp(@Body() signUpDto: RequestSignUpDto) {
+  signUp(@Body() signUpDto: SignUpDto) {
     return this.userService.signUp(signUpDto);
   }
 
@@ -60,22 +32,8 @@ export class UserController {
     summary: '카카오 로그인',
     description: '카카오 유저 로그인 API',
   })
-  @ApiCreatedResponse({
-    description: '로그인 성공',
-    schema: {
-      example: {
-        success: true,
-        message: 'success_kakao_login',
-        data: {
-          email: 'example@gmail.com',
-          name: 'user_name',
-          token: 'user_token',
-        },
-      },
-    },
-  })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
-  kakaoLogin(@Req() request, @Body() kaKaoLoginDto: RequestKakaoLoginDto) {
+  kakaoLogin(@Req() request, @Body() kaKaoLoginDto: KakaoLoginDto) {
     const kakaoUid = request.kakaoUid;
     return this.userService.kakaoLogin(kakaoUid);
   }
@@ -86,20 +44,8 @@ export class UserController {
     summary: '카카오 회원가입',
     description: '카카오 유저 회원가입 API',
   })
-  @ApiCreatedResponse({
-    description: '회원가입 성공',
-    schema: {
-      example: {
-        success: true,
-        message: 'success_kakao_sign_up',
-      },
-    },
-  })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
-  kakaoSignUp(
-    @Req() request,
-    @Body() requestKakaoSignupDto: RequestKakaoSignUpDto,
-  ) {
+  kakaoSignUp(@Req() request, @Body() requestKakaoSignupDto: KakaoSignUpDto) {
     const kakaoUid = request.kakaoUid;
     return this.userService.kakaoSignUp(requestKakaoSignupDto, kakaoUid);
   }

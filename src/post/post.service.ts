@@ -5,20 +5,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { plainToInstance } from 'class-transformer';
 import { User } from 'src/user/user.entity';
 import { Repository } from 'typeorm';
-import {
-  RequestCreatePostDto,
-  ResponseCreatePostDto,
-} from './dto/create-post.dto';
-import { ResponseDeletePostDto } from './dto/delete-post.dto';
-import { ResponsePostListDto } from './dto/post-list.dto';
-import {
-  RequestUpdatePostDto,
-  ResponseUpdatePostDto,
-} from './dto/update-post.dto';
+import { CreatePostDto } from './dto/create-post.dto';
+import { PostListDto } from './dto/post-list.dto';
+import { PostDto } from './dto/post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './post.entity';
-import { PostDetail, PostList } from './post.types';
 
 @Injectable()
 export class PostService {
@@ -29,45 +23,28 @@ export class PostService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
-  async getList(): Promise<ResponsePostListDto> {
+  async getList(): Promise<PostListDto[]> {
     const posts = await this.postRepository.find();
 
-    const postList: PostList[] = posts.map((post) => {
-      return {
-        id: post.id,
-        title: post.title,
-        writer: post.userName,
-        createdTime: post.createdAt,
-        updatedTime: post.updatedAt,
-      };
-    });
-    return { success: true, message: 'success_post_list', data: postList };
+    const postList: PostListDto[] = plainToInstance(PostListDto, posts);
+    return postList;
   }
 
-  async getPost(
-    id: number,
-  ): Promise<{ sucess: boolean; message: string; data: PostDetail }> {
+  async getPost(id: number): Promise<PostDto> {
     const post = await this.postRepository.findOne({ id: id });
     if (!post) {
       throw new BadRequestException();
     }
 
-    const detailPost: PostDetail = {
-      id: post.id,
-      writer: post.userName,
-      title: post.title,
-      content: post.content,
-      createdTime: post.createdAt,
-      updatedTime: post.updatedAt,
-    };
+    const detailPost: PostDto = plainToInstance(PostDto, post);
 
-    return { sucess: true, message: 'success_post_detail', data: detailPost };
+    return detailPost;
   }
 
   async createPost(
-    createPostData: RequestCreatePostDto,
+    createPostData: CreatePostDto,
     userId: number,
-  ): Promise<ResponseCreatePostDto> {
+  ): Promise<PostDto> {
     const user = await this.userRepository.findOne({ id: userId });
 
     if (user.name !== createPostData.userName) {
@@ -82,22 +59,15 @@ export class PostService {
 
     await this.postRepository.save(post);
 
-    const postData = {
-      id: post.id,
-      writer: post.userName,
-      title: post.title,
-      content: post.content,
-      createdTime: post.createdAt,
-      updatedTime: post.updatedAt,
-    };
+    const postData: PostDto = plainToInstance(PostDto, post);
 
-    return { success: true, message: 'success_create_post', data: postData };
+    return postData;
   }
 
   async updatePost(
-    updateData: RequestUpdatePostDto,
+    updateData: UpdatePostDto,
     userId: number,
-  ): Promise<ResponseUpdatePostDto> {
+  ): Promise<PostDto> {
     const post = await this.postRepository.findOne({ id: updateData.postId });
     if (!post) {
       throw new BadRequestException();
@@ -110,22 +80,12 @@ export class PostService {
 
     await this.postRepository.save(post);
 
-    const postData = {
-      id: post.id,
-      writer: post.userName,
-      title: post.title,
-      content: post.content,
-      createdTime: post.createdAt,
-      updatedTime: post.updatedAt,
-    };
+    const postData: PostDto = plainToInstance(PostDto, post);
 
-    return { success: true, message: 'success_update_post', data: postData };
+    return postData;
   }
 
-  async deletePost(
-    postId: number,
-    userId: number,
-  ): Promise<ResponseDeletePostDto> {
+  async deletePost(postId: number, userId: number): Promise<void> {
     const post = await this.postRepository.findOne({ id: postId });
     if (!post) {
       console.log(post);
@@ -135,6 +95,5 @@ export class PostService {
       throw new UnauthorizedException();
     }
     await this.postRepository.delete({ id: postId });
-    return { success: true, message: 'success_delete_post' };
   }
 }

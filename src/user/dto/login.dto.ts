@@ -1,7 +1,6 @@
 import { IsEmail, IsString } from 'class-validator';
-import { LoginData } from '../user.types';
 
-export class RequestLoginDto {
+export class LoginDto {
   /**
    * 가입돤 계정의 이메일
    * @example 'example@gmail.com'
@@ -15,10 +14,4 @@ export class RequestLoginDto {
    */
   @IsString()
   password: string;
-}
-
-export class ResponseLoginDto {
-  success: boolean;
-  message: string;
-  data: LoginData;
 }

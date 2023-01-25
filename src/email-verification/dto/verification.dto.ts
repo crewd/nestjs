@@ -1,6 +1,6 @@
 import { IsEmail, IsString } from 'class-validator';
 
-export class RequestVerificationDto {
+export class VerificationDto {
   /**
    * 인증번호를 받은 이메일
    * @example 'example@gmail.com'

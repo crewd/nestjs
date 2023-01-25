@@ -1,7 +1,19 @@
-import { PostList } from '../post.types';
+import { Exclude, Expose } from 'class-transformer';
 
-export class ResponsePostListDto {
-  success: boolean;
-  message: string;
-  data: PostList[];
+@Exclude()
+export class PostListDto {
+  @Expose()
+  id: number;
+
+  @Expose()
+  title: string;
+
+  @Expose()
+  writer: string;
+
+  @Expose()
+  createdTime: Date;
+
+  @Expose()
+  updatedTime: Date;
 }

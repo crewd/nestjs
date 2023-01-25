@@ -4,19 +4,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { plainToInstance } from 'class-transformer';
 import { Post } from 'src/post/post.entity';
 import { Repository } from 'typeorm';
 import { Comment } from './comment.entity';
-import { ResponseCommentsDto } from './dto/comment-list.dto';
-import {
-  RequestCreateCommentDto,
-  ResponseCreateCommentDto,
-} from './dto/create-comment.dto';
-import { ResponseDeleteCommentDto } from './dto/delete-comment.dto';
-import {
-  RequestUpdateCommentDto,
-  ResponseUpdateCommentDto,
-} from './dto/update-comment.dto';
+import { CommentDto } from './dto/comment.dto';
+import { CreateCommentDto } from './dto/create-comment.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 export class CommentService {
   constructor(
@@ -28,10 +22,10 @@ export class CommentService {
   ) {}
 
   async createComment(
-    commentData: RequestCreateCommentDto,
+    commentData: CreateCommentDto,
     postId: number,
     userId: number,
-  ): Promise<ResponseCreateCommentDto> {
+  ): Promise<void> {
     const post = await this.postRepository.findOne({ id: postId });
 
     if (!post) {
@@ -86,67 +80,28 @@ export class CommentService {
     }
 
     await this.commentRepository.save(comment);
-
-    const commentsData = await this.commentRepository.find({ postId: postId });
-
-    const comments = commentsData.map((data) => {
-      return {
-        id: data.id,
-        parentId: data.parentId,
-        userName: data.userName,
-        content: data.content,
-        depth: data.depth,
-        group: data.group,
-        order: data.order,
-        createdTime: data.createdAt,
-        updatedTime: data.updatedAt,
-      };
-    });
-
-    const sortedComments = comments.sort(
-      (a, b) => a.group - b.group || a.order - b.order,
-    );
-
-    return {
-      success: true,
-      message: 'success_create_comment',
-      data: sortedComments,
-    };
   }
 
-  async getComments(postId: number): Promise<ResponseCommentsDto> {
+  async getComments(postId: number): Promise<CommentDto[]> {
     const comments = await this.commentRepository.find({ postId: postId });
 
-    const organizedComments = comments.map((data) => {
-      return {
-        id: data.id,
-        parentId: data.parentId,
-        userName: data.userName,
-        content: data.content,
-        depth: data.depth,
-        group: data.group,
-        order: data.order,
-        createdTime: data.createdAt,
-        updatedTime: data.updatedAt,
-      };
-    });
+    const organizedComments: CommentDto[] = plainToInstance(
+      CommentDto,
+      comments,
+    );
 
     const sortedComments = organizedComments.sort(
       (a, b) => a.group - b.group || a.order - b.order,
     );
 
-    return {
-      success: true,
-      message: 'success_comment_list',
-      data: sortedComments,
-    };
+    return sortedComments;
   }
 
   async updateComment(
     commentId: number,
     userId: number,
-    updateData: RequestUpdateCommentDto,
-  ): Promise<ResponseUpdateCommentDto> {
+    updateData: UpdateCommentDto,
+  ): Promise<void> {
     const comment = await this.commentRepository.findOne({ id: commentId });
     if (!comment) {
       throw new BadRequestException();
@@ -158,14 +113,9 @@ export class CommentService {
 
     comment.content = updateData.content;
     await this.commentRepository.save(comment);
-
-    return { success: true, message: 'success_update_comment' };
   }
 
-  async deleteComment(
-    commentId: number,
-    userId: number,
-  ): Promise<ResponseDeleteCommentDto> {
+  async deleteComment(commentId: number, userId: number): Promise<void> {
     const comment = await this.commentRepository.findOne({ id: commentId });
 
     if (!comment) {
@@ -177,6 +127,5 @@ export class CommentService {
     }
 
     await this.commentRepository.delete({ id: commentId });
-    return { success: true, message: 'success_delete_comment' };
   }
 }

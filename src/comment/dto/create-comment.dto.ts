@@ -1,8 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
-import { Comment } from '../comment.types';
 
-export class RequestCreateCommentDto {
+export class CreateCommentDto {
   /**
    * 작성할 댓글의 작성자
    * @example 'comment_user_name'
@@ -24,10 +23,4 @@ export class RequestCreateCommentDto {
   @IsNumber()
   @Type(() => Number)
   parentId?: number;
-}
-
-export class ResponseCreateCommentDto {
-  success: boolean;
-  message: string;
-  data: Comment[];
 }
