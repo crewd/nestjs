@@ -29,7 +29,7 @@ export class KakaoAuthGuard implements CanActivate {
       audience: process.env.KAKAO_API_KEY,
     });
 
-    request.kakaoUid = verifyToken.sub;
+    request.user = { kakaoUid: verifyToken.sub };
 
     return true;
   }

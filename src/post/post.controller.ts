@@ -7,11 +7,11 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { User } from 'src/user/user.decorator';
 import { CreatePostDto } from './dto/create-post.dto';
 import { DeletePostDto } from './dto/delete-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -48,8 +48,10 @@ export class PostController {
     description: '게시글 생성 API',
   })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
-  createPost(@Req() request, @Body() createPostDto: CreatePostDto) {
-    const userId = Number(request.userId);
+  createPost(
+    @User('userId', ParseIntPipe) userId: number,
+    @Body() createPostDto: CreatePostDto,
+  ) {
     return this.postService.createPost(createPostDto, userId);
   }
 
@@ -61,8 +63,10 @@ export class PostController {
   })
   @ApiResponse({ status: 400, description: 'BadRequestException' })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
-  updatePost(@Req() request, @Body() updatePostDto: UpdatePostDto) {
-    const userId = Number(request.userId);
+  updatePost(
+    @User('userId', ParseIntPipe) userId: number,
+    @Body() updatePostDto: UpdatePostDto,
+  ) {
     return this.postService.updatePost(updatePostDto, userId);
   }
 
@@ -74,8 +78,10 @@ export class PostController {
   })
   @ApiResponse({ status: 400, description: 'BadRequestException' })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
-  deletePost(@Req() request, @Body() deletePostDto: DeletePostDto) {
-    const userId = Number(request.userId);
+  deletePost(
+    @User('userId', ParseIntPipe) userId: number,
+    @Body() deletePostDto: DeletePostDto,
+  ) {
     return this.postService.deletePost(deletePostDto.postId, userId);
   }
 }

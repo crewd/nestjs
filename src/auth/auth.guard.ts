@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
     }
 
     const payload = this.authService.verify(token);
-    request.userId = payload;
+    request.user = { userId: payload };
     return true;
   }
 }

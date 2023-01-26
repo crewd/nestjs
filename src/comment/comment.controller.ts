@@ -7,11 +7,11 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { User } from 'src/user/user.decorator';
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -28,10 +28,9 @@ export class CommentController {
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   createComment(
     @Param('postId', ParseIntPipe) postId: number,
-    @Req() request,
+    @User('userId', ParseIntPipe) userId: number,
     @Body() createCommentDto: CreateCommentDto,
   ) {
-    const userId = Number(request.userId);
     return this.commentService.createComment(createCommentDto, postId, userId);
   }
 
@@ -48,10 +47,9 @@ export class CommentController {
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   updateComment(
     @Param('commentId', ParseIntPipe) commentId: number,
-    @Req() request,
+    @User('userId', ParseIntPipe) userId: number,
     @Body() updateCommentDto: UpdateCommentDto,
   ) {
-    const userId = Number(request.userId);
     return this.commentService.updateComment(
       commentId,
       userId,
@@ -66,9 +64,8 @@ export class CommentController {
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   deleteComment(
     @Param('commentId', ParseIntPipe) commentId: number,
-    @Req() request,
+    @User('userId', ParseIntPipe) userId: number,
   ) {
-    const userId = Number(request.userId);
     return this.commentService.deleteComment(commentId, userId);
   }
 }
