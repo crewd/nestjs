@@ -59,17 +59,17 @@ export class UserService {
       throw new ConflictException();
     }
 
-    const verificationData = await this.verificationRepository.findOne({
-      email: signUpDto.email,
-    });
+    // const verificationData = await this.verificationRepository.findOne({
+    //   email: signUpDto.email,
+    // });
 
-    if (!verificationData) {
-      throw new UnauthorizedException('not_verified_email');
-    }
+    // if (!verificationData) {
+    //   throw new UnauthorizedException('not_verified_email');
+    // }
 
-    if (!verificationData.isVerified) {
-      throw new UnauthorizedException('not_verification');
-    }
+    // if (!verificationData.isVerified) {
+    //   throw new UnauthorizedException('not_verification');
+    // }
 
     const hashPassword = await hash(
       signUpDto.password,
