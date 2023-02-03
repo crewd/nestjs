@@ -2,7 +2,6 @@ import {
   Injectable,
   CanActivate,
   ExecutionContext,
-  BadRequestException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
