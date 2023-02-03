@@ -9,7 +9,12 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { User } from 'src/user/user.decorator';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -47,6 +52,7 @@ export class PostController {
     summary: '게시글 생성',
     description: '게시글 생성 API',
   })
+  @ApiBearerAuth()
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   createPost(
     @User('userId', ParseIntPipe) userId: number,
@@ -61,6 +67,7 @@ export class PostController {
     summary: '게시글 수정',
     description: '게시글 수정 API',
   })
+  @ApiBearerAuth()
   @ApiResponse({ status: 400, description: 'BadRequestException' })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   updatePost(
@@ -76,6 +83,7 @@ export class PostController {
     summary: '게시글 삭제',
     description: '게시글 삭제 API',
   })
+  @ApiBearerAuth()
   @ApiResponse({ status: 400, description: 'BadRequestException' })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   deletePost(

@@ -3,6 +3,7 @@ import {
   CanActivate,
   ExecutionContext,
   BadRequestException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
@@ -17,13 +18,13 @@ export class AuthGuard implements CanActivate {
     const authHeader = request.headers['authorization'];
 
     if (!authHeader) {
-      throw new BadRequestException();
+      throw new UnauthorizedException();
     }
 
     const token = authHeader.split('Bearer ')[1];
 
     if (!token) {
-      throw new BadRequestException();
+      throw new UnauthorizedException();
     }
 
     const payload = this.authService.verify(token);

@@ -17,7 +17,9 @@ async function bootstrap() {
     .setDescription('nestjs')
     .setVersion('1.0')
     .addTag('nestjs')
+    .addBearerAuth({ in: 'header', type: 'http' })
     .build();
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
   await app.listen(3000);

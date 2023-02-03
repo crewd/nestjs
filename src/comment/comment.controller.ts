@@ -9,7 +9,12 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { User } from 'src/user/user.decorator';
 import { CommentService } from './comment.service';
@@ -24,6 +29,7 @@ export class CommentController {
   @UseGuards(AuthGuard)
   @Post('post/:postId/comment')
   @ApiOperation({ summary: '댓글 작성', description: '댓글 작성 API' })
+  @ApiBearerAuth()
   @ApiResponse({ status: 400, description: 'BadRequestException' })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   createComment(
@@ -43,6 +49,7 @@ export class CommentController {
   @UseGuards(AuthGuard)
   @Patch('comment/:commentId')
   @ApiOperation({ summary: '댓글 수정', description: '댓글 수정 API' })
+  @ApiBearerAuth()
   @ApiResponse({ status: 400, description: 'BadRequestException' })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   updateComment(
@@ -60,6 +67,7 @@ export class CommentController {
   @UseGuards(AuthGuard)
   @Delete('comment/:commentId')
   @ApiOperation({ summary: '댓글 삭제', description: '댓글 삭제 API' })
+  @ApiBearerAuth()
   @ApiResponse({ status: 400, description: 'BadRequestException' })
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   deleteComment(
