@@ -32,7 +32,7 @@ export class PostController {
     summary: '게시글 목록 조회',
     description: '게시글 목록 조회 API',
   })
-  getLsit() {
+  getList() {
     return this.postService.getList();
   }
 

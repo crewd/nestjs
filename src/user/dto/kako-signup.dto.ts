@@ -25,13 +25,6 @@ export class KakaoSignUpDto {
   age: number;
 
   /**
-   * 가입할 유저의 비밀번호
-   * @example 'user_password'
-   */
-  @IsString()
-  password: string;
-
-  /**
    * 카카오 아이디 토큰
    * @example 'KakaoIdToken'
    */
