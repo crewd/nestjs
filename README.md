@@ -1,73 +1,70 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NestJs 게시판
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJs로 만든 로그인, 회원가입, 게시글, 댓글 기능이 있는 게시판 API입니다.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 설치
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
+```
+npm install
 ```
 
-## Running the app
+## 실행
 
-```bash
-# development
-$ npm run start
+- `.env.example` 파일을 참고하여 `.env` 파일 생성
 
-# watch mode
-$ npm run start:dev
+- `docker-compose.yml`을 이용해 `docker-compose up` 명령어 실행
 
-# production mode
-$ npm run start:prod
-```
+- ```
+  # development
+  $ npm run start
 
-## Test
+  # watch mode
+  $ npm run start:dev
 
-```bash
-# unit tests
-$ npm run test
+  # production mode
+  $ npm run start:prod
+  ```
 
-# e2e tests
-$ npm run test:e2e
+## API
 
-# test coverage
-$ npm run test:cov
-```
+`http://localhost:3000/api`
 
-## Support
+### User
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- POST `/user/login` 로그인
 
-## Stay in touch
+- POST `/user/signup` 회원가입
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- POST `/user/kakao/login` 카카오 로그인
 
-## License
+- POST `/user/kakao/signup` 카카오 회원가입
 
-Nest is [MIT licensed](LICENSE).
+### Email Verification
+
+> **이메일 서비스 사용 기간 종료**
+
+- POST `/email-verification/send` 인증 이메일 전송
+
+- POST `/email-verification/verify` 인증번호 인증
+
+### Post
+
+- GET /post/list 게시글 목록 조회
+
+- GET `/post/{id}` 게시글 상세 조회
+
+- POST `/post/create` 게시글 생성
+
+- PATCH `/post/update` 게시글 수정
+
+- DELETE `/post/delete` 게시글 삭제
+
+### Comment
+
+- POST `/post/{postId}/comment` 댓글 작성
+
+- GET `/post/{postId}/comments` 댓글 목록
+
+- PATCH `/comment/{commentId}` 댓글 수정
+
+- DELETE `/comment/{commentId}` 댓글 삭제
