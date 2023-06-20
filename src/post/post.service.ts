@@ -11,8 +11,8 @@ import { Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostListDto } from './dto/post-list.dto';
 import { PostDto } from './dto/post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
 import { Post } from './post.entity';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostService {
@@ -65,10 +65,11 @@ export class PostService {
   }
 
   async updatePost(
-    updateData: UpdatePostDto,
     userId: number,
+    postId: number,
+    updateData: UpdatePostDto,
   ): Promise<PostDto> {
-    const post = await this.postRepository.findOne({ id: updateData.postId });
+    const post = await this.postRepository.findOne({ id: postId });
     if (!post) {
       throw new BadRequestException();
     }

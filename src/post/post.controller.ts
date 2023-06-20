@@ -18,9 +18,8 @@ import {
 import { AuthGuard } from 'src/auth/auth.guard';
 import { User } from 'src/user/user.decorator';
 import { CreatePostDto } from './dto/create-post.dto';
-import { DeletePostDto } from './dto/delete-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
 import { PostService } from './post.service';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @ApiTags('Post API')
 @Controller('post')
@@ -72,9 +71,10 @@ export class PostController {
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   updatePost(
     @User('userId', ParseIntPipe) userId: number,
+    @Param('postId', ParseIntPipe) postId: number,
     @Body() updatePostDto: UpdatePostDto,
   ) {
-    return this.postService.updatePost(updatePostDto, userId);
+    return this.postService.updatePost(userId, postId, updatePostDto);
   }
 
   @UseGuards(AuthGuard)
@@ -88,8 +88,8 @@ export class PostController {
   @ApiResponse({ status: 401, description: 'UnauthorizedException' })
   deletePost(
     @User('userId', ParseIntPipe) userId: number,
-    @Body() deletePostDto: DeletePostDto,
+    @Param('postId', ParseIntPipe) postId: number,
   ) {
-    return this.postService.deletePost(deletePostDto.postId, userId);
+    return this.postService.deletePost(postId, userId);
   }
 }

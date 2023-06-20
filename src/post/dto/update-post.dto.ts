@@ -15,15 +15,6 @@ export class UpdatePostDto {
    */
   @IsString()
   content: string;
-
-  /**
-   * 수정할 게시글의 Id
-   * @example 1
-   */
-  @IsNumber()
-  @Type(() => Number)
-  postId: number;
-
   /**
    * 수정할 게시글의 작성자
    * @example 'post_user_name'
